@@ -12,6 +12,7 @@ namespace Malshinon_09_06
     {
         static void Main(string[] args)
         {
+            
         }
     }
 }

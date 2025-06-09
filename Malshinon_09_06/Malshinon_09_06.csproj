@@ -97,6 +97,7 @@
   <ItemGroup>
     <Compile Include="DAL\PeopleDal.cs" />
     <Compile Include="GenerateCode.cs" />
+    <Compile Include="IntelReports.cs" />
     <Compile Include="Models\Person.cs" />
     <Compile Include="Identification.cs" />
     <Compile Include="Program.cs" />

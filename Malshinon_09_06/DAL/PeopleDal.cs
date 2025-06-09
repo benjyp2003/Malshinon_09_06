@@ -53,6 +53,7 @@ namespace Malshinon_09_06.DAL
             }
         }
 
+
         public void AddPerson(Person person)
         {
             try
