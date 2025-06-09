@@ -10,19 +10,19 @@ namespace Malshinon_09_06.DAL
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string SecretCode { get; set; }
+        public string SecretCode { get; set; } 
         public string Type { get; set; }
-        public int Num_reports { get; set; } = 0;
-        public int Num_mentions { get; set; } = 0;
+        public int Num_reports { get; set; } 
+        public int Num_mentions { get; set; } 
 
-        public Person(string firstName, string lastNmae, string secretCode, string type, int numReports, int numMentions)
+        public Person(string firstName, string lastNmae, string type)
         {
             FirstName = firstName;
             LastName = lastNmae;
-            SecretCode = secretCode;
+            SecretCode = GenerateCode.Generate();
             Type = type;
-            Num_reports = numReports;
-            Num_mentions = numMentions;
+            Num_reports = 0;
+            Num_mentions = 0;
         }
     }
 }
