@@ -84,5 +84,8 @@ namespace Malshinon_09_06.DAL
                 Console.WriteLine($"General Error: {ex.Message}");
             }
         }
+
+
+
     }
 }

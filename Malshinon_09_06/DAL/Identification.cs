@@ -11,7 +11,7 @@ namespace Malshinon_09_06
     internal class Identification : PeopleDal
     {
 
-        public bool IsARegisterdPerson(string firstName, string lastName)
+        public bool IsARegisterdPerson(string lastName, string firstName)
         {
             
             try
@@ -22,7 +22,7 @@ namespace Malshinon_09_06
 
                     string query = @" SELECT first_name, last_name
                                         FROM People
-                                        WHERE firstName = @first_name AND lastName = @last_name";
+                                        WHERE (last_name = @last_name AND first_name = @first_name";
 
                     using (MySqlCommand cmd = new MySqlCommand(query, conn))
                     {
