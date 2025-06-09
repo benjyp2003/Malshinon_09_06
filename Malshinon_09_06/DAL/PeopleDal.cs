@@ -53,6 +53,35 @@ namespace Malshinon_09_06.DAL
             }
         }
 
-        //public void AddPerson()
+        public void AddPerson(Person person)
+        {
+            try
+            {
+                using (var conn = new MySqlConnection(connStr))
+                {
+                    conn.Open();
+                    var query = @"INSERT INTO People (first_name, last_name, secret_code , type, num_reports, num_mentions  )
+                      VALUES (@FirstName, @lastName, @SecretCode, @type, @numReports, @numMensions)";
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@FirstName", person.FirstName);
+                        cmd.Parameters.AddWithValue("@lastName", person.LastName);
+                        cmd.Parameters.AddWithValue("@SecretCode", person.SecretCode);
+                        cmd.Parameters.AddWithValue("@type", person.Type);
+                        cmd.Parameters.AddWithValue("@numReports", person.Num_reports);
+                        cmd.Parameters.AddWithValue("@numMensions", person.Num_mentions);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"MySQL Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message}");
+            }
+        }
     }
 }
