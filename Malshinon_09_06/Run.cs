@@ -71,5 +71,7 @@ namespace Malshinon_09_06
             }
 
         }
+
+        public static void SaveReport()
     }
 }

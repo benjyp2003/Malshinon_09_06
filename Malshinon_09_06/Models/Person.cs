@@ -27,5 +27,7 @@ namespace Malshinon_09_06.DAL
             Num_reports = 0;
             Num_mentions = 0;
         }
+
+
     }
 }
