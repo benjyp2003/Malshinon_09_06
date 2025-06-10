@@ -1,4 +1,5 @@
-﻿using MySql.Data.MySqlClient;
+﻿using Google.Protobuf.Compiler;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,7 +86,61 @@ namespace Malshinon_09_06.DAL
             }
         }
 
+        public void IncrementNumReports()
+        {
+            try
+            {
+                using (var conn = new MySqlConnection(connStr))
+                {
+                    conn.Open();
+                    var query = $@"
+                                UPDATE `people` 
+                                SET num_reports = num_reports + {1}";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                        Console.WriteLine("Incremented reports number by one.");
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"MySQL Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message}");
+            }
+        }
 
 
+        public void IncrementNumMentions()
+        {
+            try
+            {
+                using (var conn = new MySqlConnection(connStr))
+                {
+                    conn.Open();
+                    var query = $@"
+                                UPDATE `people` 
+                                SET num_reports = num_mensions + {1}";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.ExecuteNonQuery();
+                        Console.WriteLine("Incremented mentions number by one.");
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"MySQL Error: {ex.Message}");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message}");
+            }
+        }
     }
 }

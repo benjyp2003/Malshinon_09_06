@@ -13,7 +13,6 @@ namespace Malshinon_09_06
 
         public bool IsARegisterdPerson(string lastName, string firstName)
         {
-            
             try
             {
                 using (MySqlConnection conn = new MySqlConnection(connStr))

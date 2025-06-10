@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Malshinon_09_06.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,7 +14,9 @@ namespace Malshinon_09_06.DAL
         public string SecretCode { get; set; }
         public string Type { get; set; } 
         public int Num_reports { get; set; } 
-        public int Num_mentions { get; set; } 
+        public int Num_mentions { get; set; }
+
+        public FullName FullName => new FullName(FirstName, LastName);
 
         public Person(string firstName, string lastNmae, string type = "Reporter")
         {
