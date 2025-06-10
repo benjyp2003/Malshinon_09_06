@@ -14,7 +14,10 @@ namespace Malshinon_09_06
     {
         static void Main(string[] args)
         {
-            Run();
+            PeopleDal Dal = new PeopleDal();
+            Identification Check = new Identification();
+            FullName f = new FullName("Muhamad", "Zidan");
+            Console.WriteLine(Dal.GetId(f));
         }
 
 

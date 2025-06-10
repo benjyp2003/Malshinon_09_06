@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Malshinon_09_06.Models;
+using Mysqlx;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,17 +10,28 @@ namespace Malshinon_09_06.DAL
 {
     internal static class FilterNameFromText
     {
-        static public List<string> FilterAndGetName(string text)
+        static public FullName FilterAndGetName(string text)
         {
-            List<string> names = new List<string>();
-            foreach (string word in text.Split(' '))
+            try
             {
-                if (char.IsUpper(word[0]))
+                bool flag = false;
+                string firstName = "";
+                foreach (string word in text.Split(' '))
                 {
-                    names.Add(word);
+                    if (char.IsUpper(word[0]) & !flag)
+                    {
+                        firstName = word;
+                        flag = true;
+                    }
+                    else
+                    {
+                        return new FullName(firstName, word);
+                    }
                 }
             }
-            return names;   
+            catch (Exception ex)
+            { Console.WriteLine("Error: " + ex); }
+            return null;   
         }
     }
 }

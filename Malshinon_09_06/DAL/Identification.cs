@@ -15,7 +15,7 @@ namespace Malshinon_09_06
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connStr))
+                using (MySqlConnection conn = new MySqlConnection(ConnStr))
                 {
                     conn.Open();
 

@@ -1,4 +1,5 @@
 ﻿using Google.Protobuf.Compiler;
+using Malshinon_09_06.Models;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -8,33 +9,33 @@ using System.Threading.Tasks;
 
 namespace Malshinon_09_06.DAL
 {
-    internal class PeopleDal
+    internal class PeopleDal 
     {
-        protected string connStr = "server=localhost;user=root;password=;database=Malshinon";
-        protected MySqlConnection _conn;
+        protected string ConnStr = "server=localhost;user=root;password=;database=Malshinon";
+        protected MySqlConnection Conn;
 
-        public MySqlConnection openConnection()
+        public MySqlConnection OpenConnection()
         {
-            if (_conn == null)
+            if (Conn == null)
             {
-                _conn = new MySqlConnection(connStr);
+                Conn = new MySqlConnection(ConnStr);
             }
 
-            if (_conn.State != System.Data.ConnectionState.Open)
+            if (Conn.State != System.Data.ConnectionState.Open)
             {
-                _conn.Open();
+                Conn.Open();
                 Console.WriteLine("Connection successful.");
             }
 
-            return _conn;
+            return Conn;
         }
 
-        public void closeConnection()
+        public void CloseConnection()
         {
-            if (_conn != null && _conn.State == System.Data.ConnectionState.Open)
+            if (Conn != null && Conn.State == System.Data.ConnectionState.Open)
             {
-                _conn.Close();
-                _conn = null;
+                Conn.Close();
+                Conn = null;
             }
         }
 
@@ -42,7 +43,7 @@ namespace Malshinon_09_06.DAL
         {
             try
             {
-                openConnection();
+                OpenConnection();
             }
             catch (MySqlException ex)
             {
@@ -59,7 +60,7 @@ namespace Malshinon_09_06.DAL
         {
             try
             {
-                using (var conn = new MySqlConnection(connStr))
+                using (var conn = new MySqlConnection(ConnStr))
                 {
                     conn.Open();
                     var query = @"INSERT INTO People (first_name, last_name, secret_code , type, num_reports, num_mentions  )
@@ -91,7 +92,7 @@ namespace Malshinon_09_06.DAL
         {
             try
             {
-                using (var conn = new MySqlConnection(connStr))
+                using (var conn = new MySqlConnection(ConnStr))
                 {
                     conn.Open();
                     var query = $@"
@@ -119,7 +120,7 @@ namespace Malshinon_09_06.DAL
         {
             try
             {
-                using (var conn = new MySqlConnection(connStr))
+                using (var conn = new MySqlConnection(ConnStr))
                 {
                     conn.Open();
                     var query = $@"
@@ -142,5 +143,49 @@ namespace Malshinon_09_06.DAL
                 Console.WriteLine($"General Error: {ex.Message}");
             }
         }
+
+        public string GetPersonsId(FullName fullName)
+        {
+            try
+            {
+                using (var conn = new MySqlConnection(ConnStr))
+                {
+                    conn.Open();
+                    var query = $@"
+                                SELECT secret_code 
+                                FROM people
+                                WHERE first_name = @firstName AND last_name = @lastName";
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@firstName", fullName.FirstName);
+                        cmd.Parameters.AddWithValue("@lastName", fullName.LastName);
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                return reader.GetString("secret_code");
+                            }
+                            else
+                            {
+                                Console.WriteLine("No matches found.");
+                                return null;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"MySQL Error: {ex.Message}.  at PeopleDal.GetId");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message}");
+            }
+            return null;
+        }
+
+        
     }
 }
