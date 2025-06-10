@@ -1,77 +1,96 @@
-﻿//using Malshinon_09_06.DAL;
-//using Malshinon_09_06.Models;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
+﻿using Malshinon_09_06.DAL;
+using Malshinon_09_06.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-//namespace Malshinon_09_06
-//{
-//    internal class RunningFunctions
-//    {
-//        static RunningFunctions Instance = null;
-//        static PeopleDal Dal = new PeopleDal();
-//        static Identification Check = new Identification();
-//        RunningFunctions() {  }
+namespace Malshinon_09_06
+{
+    internal class RunningFunctions
+    {
+        static RunningFunctions Instance = null;
+        static PeopleDal Dal = new PeopleDal();
+        static IntelReportsDal reportDal = IntelReportsDal.GetInstance(); 
 
-//        public RunningFunctions GetInstance()
-//        {
-//            if (Instance == null)
-//            {
-//                Instance = new RunningFunctions();
-//            }
-//            return Instance;
-//        }
+        RunningFunctions() { }
 
-//        public void GetUserInfo()
-//        {
-//            try
-//            {
-//                UserInterface u = new UserInterface();
-//                string[] a = u.GetFullName();
+        public static RunningFunctions GetInstance()
+        {
+            if (Instance == null)
+            {
+                Instance = new RunningFunctions();
+            }
+            return Instance;
+        }
 
-//                string firstName = a[0];
-//                string lastName = a[1];
-//                FullName fullName = new FullName(firstName, lastName);
+        public void Start()
+        {
+            while (true)
+            {
+                // get full name of the reporter.
+                FullName reporterFullName = GetUserName();
+                Dal.HandleReporterName(reporterFullName);
 
-//                string text = u.GetText();
+                // check the amount of reprots the reporter has, and update his type if needed. 
+                Dal.CheckNumReports(reporterFullName);
 
-//                bool isInTable = Check.IsARegisterdPerson(lastName, firstName);
-//                if (!isInTable)
-//                {
-//                    Console.WriteLine("add p");
-//                    //dal.AddPerson(new Person(firstName, lastName));
-//                }
-//                else
-//                {
-//                    Console.WriteLine("Person already exists");
-//                }
-//            }
-//            catch (Exception ex)
-//            { Console.WriteLine(ex); }
-//        }
+                // get the report.
+                string reportTxt = UserInterface.GetReport();
 
-//        public static void AnalyzeText(string text)
-//        {
+                // extract name of the target out of the report.
+                FullName TargetFullName = FilterNameFromText.FilterAndGetName(reportTxt);
 
-//            string temp = null;
+                // send targets name for handeling.
+                Dal.HandleTargetName(TargetFullName);
 
-//            foreach (string s in FilterNameFromText.FilterAndGetName(text))
-//            {
-//                if (Check.IsARegisterdPerson(s, temp))
-//                {
-//                    Console.WriteLine($"already exists {temp}, {s}");
-//                }
-//                else
-//                {
-//                    Console.WriteLine($"adding {temp}, {s}");
-//                }
-//                temp = s;
-//            }
+                // // check the amount of mentions the target has, and give an alert if needed. 
+                Dal.CheckNumMentions(TargetFullName);
 
-//        }
+                // get reporter and targets id.
+                int reporterId = Dal.GetPersonsId(reporterFullName);
+                int targetId = Dal.GetPersonsId(TargetFullName);
 
-//        public static void SaveReport()
-//    }
-//}
+                // create a report.
+                IntelReports report = new IntelReports(reporterId, targetId, reportTxt);
+
+                // send the report for handling. (sending to dataBase etc.)
+                reportDal.HandleReports(report);
+
+                // If the user presses 0 the program will finish.              
+                if (ExitOption() == '0')
+                { break; }
+            }
+        }
+
+        FullName GetUserName()
+        {
+            try
+            {
+                string[] a = UserInterface.GetFullName();
+
+                string firstName = a[0];
+                string lastName = a[1];
+                FullName fullName = new FullName(firstName, lastName);
+
+                return fullName;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message}, At Run.GetUserInfo");
+            }
+            return null;
+        }
+
+        char ExitOption()
+        {
+            Console.WriteLine("┌──────────────────────────────────────────────┐");
+            Console.WriteLine("│       Press any key  (or '0' to exit):       |");
+            Console.WriteLine("└──────────────────────────────────────────────┘");
+            char key = Console.ReadKey().KeyChar;
+            Console.WriteLine(); // Add a new line after the key press
+            return key;
+        }
+    }
+}

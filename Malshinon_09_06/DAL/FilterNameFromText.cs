@@ -16,21 +16,25 @@ namespace Malshinon_09_06.DAL
             {
                 bool flag = false;
                 string firstName = "";
-                foreach (string word in text.Split(' '))
+                string lastName = "";
+                string[] textArr= text.Split(' ');
+                foreach (string word in textArr)
                 {
-                    if (char.IsUpper(word[0]) & !flag)
+                    if (flag)
+                    {
+                        lastName = word;
+                        break;
+                    }
+                    if (char.IsUpper(word[0]))
                     {
                         firstName = word;
                         flag = true;
-                    }
-                    else
-                    {
-                        return new FullName(firstName, word);
-                    }
+                    }                    
                 }
+                return new FullName(firstName, lastName);
             }
             catch (Exception ex)
-            { Console.WriteLine("Error: " + ex); }
+            { Console.WriteLine("Error: " + ex + " at FilterAndGetName"); }
             return null;   
         }
     }

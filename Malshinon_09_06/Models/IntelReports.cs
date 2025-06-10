@@ -12,14 +12,12 @@ namespace Malshinon_09_06
         public int ReporterId { get; set; }
         public int TargetId { get; set; }  
         public string Text { get; }
-        public string TimeStamp { get; }
 
-        public IntelReports(int reporterId, int targetId, string text, string timeStamp)
+        public IntelReports(int reporterId, int targetId, string text)
         {
             ReporterId = reporterId;
             TargetId = targetId;
             Text = text;
-            TimeStamp = timeStamp;
         }
     }
 }
