@@ -9,23 +9,30 @@ namespace Malshinon_09_06.DAL
 {
     internal class Person
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string SecretCode { get; set; }
+        public string FirstName { get; }
+        public string LastName { get; }
+        public string SecretCode { get;  }
         public string Type { get; set; } 
-        public int Num_reports { get; set; } 
-        public int Num_mentions { get; set; }
+        public int NumReports { get; set; } 
+        public int NumMentions { get; set; }
 
         public FullName FullName => new FullName(FirstName, LastName);
 
-        public Person(string firstName, string lastNmae, string type = "Reporter")
+        public Person(string firstName, string lastNmae, string secretCode = "", string type = "Reporter", int numReports = 0, int numMensions = 0)
         {
             FirstName = firstName;
             LastName = lastNmae;
-            SecretCode = GenerateCode.Generate();
+            if (secretCode == "")
+            {
+                SecretCode = GenerateCode.Generate();
+            }
+            else
+            {
+                SecretCode = secretCode;
+            }
             Type = type;
-            Num_reports = 0;
-            Num_mentions = 0;
+            NumReports = numReports;
+            NumMentions = numMensions;
         }
 
 

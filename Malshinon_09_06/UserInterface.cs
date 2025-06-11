@@ -4,6 +4,11 @@ namespace Malshinon_09_06
 {
     internal static class UserInterface
     {
+        public static void ShowMenu()
+        {
+
+        }
+
         /// <summary>
         /// Prompts the user for first and last name, returning an array where
         /// index 0 = first name, index 1 = last name.
