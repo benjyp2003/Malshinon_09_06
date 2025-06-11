@@ -95,6 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DAL\Alerts.cs" />
     <Compile Include="DAL\Dal.cs" />
     <Compile Include="DAL\FilterNameFromText.cs" />
     <Compile Include="DAL\PeopleDal.cs" />

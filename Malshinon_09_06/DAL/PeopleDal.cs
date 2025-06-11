@@ -71,14 +71,14 @@ namespace Malshinon_09_06.DAL
         /// <param name="fullName"></param>
         public void HandleReporterName(FullName fullName)
         {
-            int id = Convert.ToInt32(GetColomnByName(fullName, "num_reports"));
+            int id = Convert.ToInt32(GetColomnByName(fullName, "id"));
             if (IsARegisterdPerson(fullName))
             {
                 IncrementNumReports(id);
             }
             else
             {
-                AddPerson(new Person(fullName.FirstName, fullName.LastName));
+                AddPerson(new Person(Convert.ToInt32(GetColomnByName(fullName, "id")) , fullName.FirstName, fullName.LastName));
                 IncrementNumReports(id);
             }
         }
@@ -104,7 +104,7 @@ namespace Malshinon_09_06.DAL
             }
             else
             {
-                AddPerson(new Person(fullName.FirstName, fullName.LastName, "Target"));
+                AddPerson(new Person(Convert.ToInt32(GetColomnByName(fullName, "id")) , fullName.FirstName, fullName.LastName, "Target"));
                 IncrementNumMentions(id);
             }
         }
@@ -117,10 +117,11 @@ namespace Malshinon_09_06.DAL
                 using (var conn = new MySqlConnection(ConnStr))
                 {
                     conn.Open();
-                    var query = @"INSERT INTO People (first_name, last_name, secret_code , type, num_reports, num_mentions  )
-                      VALUES (@FirstName, @lastName, @SecretCode, @type, @numReports, @numMensions)";
+                    var query = @"INSERT INTO People (id, first_name, last_name, secret_code , type, num_reports, num_mentions  )
+                      VALUES (@id, @FirstName, @lastName, @SecretCode, @type, @numReports, @numMensions)";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
+                        cmd.Parameters.AddWithValue("id", person.Id);
                         cmd.Parameters.AddWithValue("@FirstName", person.FirstName);
                         cmd.Parameters.AddWithValue("@lastName", person.LastName);
                         cmd.Parameters.AddWithValue("@SecretCode", person.SecretCode);
@@ -200,7 +201,8 @@ namespace Malshinon_09_06.DAL
                         {
                             while (reader.Read())
                             {
-                                peopleList.Add( new Person(
+                                peopleList.Add(new Person(
+                                   reader.GetInt32("id"),
                                    reader.GetString("first_name"),
                                    reader.GetString("last_name"),
                                    reader.GetString("secret_code"),
@@ -246,6 +248,7 @@ namespace Malshinon_09_06.DAL
                             while (reader.Read())
                             {
                                 peopleList.Add(new Person(
+                                    reader.GetInt32("id"),
                                    reader.GetString("first_name"),
                                    reader.GetString("last_name"),
                                    reader.GetString("secret_code"),
@@ -291,6 +294,7 @@ namespace Malshinon_09_06.DAL
                             while (reader.Read())
                             {
                                 peopleList.Add(new Person(
+                                   reader.GetInt32("id"),
                                    reader.GetString("first_name"),
                                    reader.GetString("last_name"),
                                    reader.GetString("secret_code"),
@@ -338,6 +342,7 @@ namespace Malshinon_09_06.DAL
                             while (reader.Read())
                             {
                                 peopleList.Add(new Person(
+                                   reader.GetInt32("id"),
                                    reader.GetString("first_name"),
                                    reader.GetString("last_name"),
                                    reader.GetString("secret_code"),
@@ -384,6 +389,7 @@ namespace Malshinon_09_06.DAL
                             while (reader.Read())
                             {
                                 peopleList.Add(new Person(
+                                    reader.GetInt32("id"),
                                    reader.GetString("first_name"),
                                    reader.GetString("last_name"),
                                    reader.GetString("secret_code"),
@@ -431,6 +437,7 @@ namespace Malshinon_09_06.DAL
                             if (reader.Read())
                             {
                                  return new Person(
+                                     reader.GetInt32("id"),
                                     reader.GetString("first_name"),
                                     reader.GetString("last_name"),
                                     reader.GetString("secret_code"),
@@ -479,6 +486,7 @@ namespace Malshinon_09_06.DAL
                             if (reader.Read())
                             {
                                 return new Person(
+                                    reader.GetInt32("id"),
                                    reader.GetString("first_name"),
                                    reader.GetString("last_name"),
                                    reader.GetString("secret_code"),
@@ -537,7 +545,11 @@ namespace Malshinon_09_06.DAL
                             }
                             else
                             {
+                                Console.ForegroundColor = ConsoleColor.DarkRed;
+
                                 Console.WriteLine($"No {colomn} match for id: {id} found in people.\n");
+                                Console.ForegroundColor = ConsoleColor.White;
+
                             }
                         }
                     }
@@ -585,7 +597,11 @@ namespace Malshinon_09_06.DAL
                             }
                             else
                             {
+                                Console.ForegroundColor = ConsoleColor.DarkRed;
+
                                 Console.WriteLine($"No {colomn} match for id- {fullName.fullName} found in people.\n");
+                                Console.ForegroundColor = ConsoleColor.White;
+
                             }
                         }
                     }
@@ -611,7 +627,7 @@ namespace Malshinon_09_06.DAL
                     conn.Open();
                     var query = @"
                                 UPDATE people 
-                                SET num_reports = num_reports + @count
+                                SET num_reports = num_reports + 1
                                 WHERE @id = id";
 
                     using (var cmd = new MySqlCommand(query, conn))
@@ -619,7 +635,7 @@ namespace Malshinon_09_06.DAL
                         cmd.Parameters.AddWithValue("@count", 1);
                         cmd.Parameters.AddWithValue("@id", id);
                         cmd.ExecuteNonQuery();
-                        Console.WriteLine($"Incremented reports number by one.\n");
+                        Console.WriteLine($"Incremented reports number of id: {id} by one.\n");
                     }
                 }
             }
@@ -650,7 +666,7 @@ namespace Malshinon_09_06.DAL
                     {
                         cmd.Parameters.AddWithValue("@id", id);
                         cmd.ExecuteNonQuery();
-                        Console.WriteLine("Incremented mentions number by one.\n");
+                        Console.WriteLine($"Incremented mentions number of id: {id} by one.\n");
                     }
                 }
             }
@@ -697,7 +713,10 @@ namespace Malshinon_09_06.DAL
                 if (numOfMentions >= 20)
                 {
                     ChangeType(id, "Dangerous Target");
-                    Console.WriteLine("Caution ! this target has 20+ mentions. "); ;
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+
+                    Console.WriteLine("Caution ! this target has 20+ mentions. ");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
             }
             catch (MySqlException ex)

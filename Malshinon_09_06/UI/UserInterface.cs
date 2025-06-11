@@ -8,6 +8,7 @@ namespace Malshinon_09_06
         static RunningFunctions Run = RunningFunctions.GetInstance(); 
         public static void ShowAnalysisMenu()
         {
+            Console.ForegroundColor = ConsoleColor.Cyan;
             Console.WriteLine("\n*** ── Welcome to the MALSHINON Program! ── ***");
             Console.WriteLine("│                                               │");
             Console.WriteLine("├───────────────────────────────────────────────┤");
@@ -24,6 +25,8 @@ namespace Malshinon_09_06
             Console.WriteLine("│ 9 - Get Reporters average report length.      │");
             Console.WriteLine("│ 0 - Exit                                      │");
             Console.WriteLine("└───────────────────────────────────────────────┘\n");
+            Console.ForegroundColor = ConsoleColor.White;
+
             Console.Write("Enter your choice: ");
         }
 

@@ -89,6 +89,8 @@ namespace Malshinon_09_06
             int reporterId = Convert.ToInt32(Dal.GetColomnByName(reporterFullName, "id"));
             int targetId = Convert.ToInt32(Dal.GetColomnByName(targetFullName, "id"));
 
+            Dal.HandleReporterName(reporterFullName);
+            Dal.HandleTargetName(targetFullName);
 
             IntelReports report = new IntelReports(reporterId, targetId, text);
             ReportDal.HandleReports(report);

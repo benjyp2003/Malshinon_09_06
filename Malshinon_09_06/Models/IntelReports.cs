@@ -9,8 +9,8 @@ namespace Malshinon_09_06
 {
     internal class IntelReports
     {
-        public int ReporterId { get; set; }
-        public int TargetId { get; set; }  
+        public int ReporterId { get; }
+        public int TargetId { get; }  
         public string Text { get; }
 
         public IntelReports(int reporterId, int targetId, string text)
