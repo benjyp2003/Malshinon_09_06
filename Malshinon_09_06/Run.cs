@@ -11,7 +11,7 @@ namespace Malshinon_09_06
     internal class RunningFunctions
     {
         static RunningFunctions Instance = null;
-        static PeopleDal Dal = new PeopleDal();
+        static PeopleDal Dal = PeopleDal.GetInstance();
         static IntelReportsDal reportDal = IntelReportsDal.GetInstance(); 
 
         RunningFunctions() { }

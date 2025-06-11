@@ -95,7 +95,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DAL\IDAL.cs" />
+    <Compile Include="DAL\Dal.cs" />
     <Compile Include="DAL\FilterNameFromText.cs" />
     <Compile Include="DAL\PeopleDal.cs" />
     <Compile Include="GenerateCode.cs" />
@@ -112,6 +112,8 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="UI\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

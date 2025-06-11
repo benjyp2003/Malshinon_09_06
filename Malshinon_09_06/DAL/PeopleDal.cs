@@ -9,12 +9,10 @@ using System.Threading.Tasks;
 
 namespace Malshinon_09_06.DAL
 {
-    internal class PeopleDal 
+    internal class PeopleDal : Dal
     {
-        protected string ConnStr = "server=localhost;user=root;password=;database=Malshinon";
-        protected MySqlConnection Conn;
-
-        MySqlConnection OpenConnection()
+        private static PeopleDal instance = null;
+        protected override MySqlConnection OpenConnection()
         {
             if (Conn == null)
             {
@@ -30,7 +28,7 @@ namespace Malshinon_09_06.DAL
             return Conn;
         }
 
-        void CloseConnection()
+        protected override void CloseConnection()
         {
             if (Conn != null && Conn.State == System.Data.ConnectionState.Open)
             {
@@ -39,7 +37,7 @@ namespace Malshinon_09_06.DAL
             }
         }
 
-        public PeopleDal()
+        PeopleDal()
         {
             try
             {
@@ -53,6 +51,13 @@ namespace Malshinon_09_06.DAL
             {
                 Console.WriteLine($"General Error: {ex.Message}");
             }
+        }
+
+        public static PeopleDal GetInstance()
+        {
+            if ( instance == null )
+            { instance = new PeopleDal();}
+            return instance;
         }
 
 

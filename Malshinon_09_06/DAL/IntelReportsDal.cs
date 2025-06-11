@@ -9,36 +9,35 @@ using System.Threading.Tasks;
 
 namespace Malshinon_09_06
 {
-    internal class IntelReportsDal
+    internal class IntelReportsDal : Dal
     {
-        protected string connStr = "server=localhost;user=root;password=;database=Malshinon";
-        protected MySqlConnection _conn;
+       
         private static IntelReportsDal Instance = null;
 
         public static Dictionary<int, int> AverageReportersText = new Dictionary<int, int>();
 
-        public MySqlConnection OpenConnection()
+        protected override MySqlConnection OpenConnection()
         {
-            if (_conn == null)
+            if (Conn == null)
             {
-                _conn = new MySqlConnection(connStr);
+                Conn = new MySqlConnection(ConnStr);
             }
 
-            if (_conn.State != System.Data.ConnectionState.Open)
+            if (Conn.State != System.Data.ConnectionState.Open)
             {
-                _conn.Open();
+                Conn.Open();
                 Console.WriteLine("Connection successful.");
             }
 
-            return _conn;
+            return Conn;
         }
 
-        public void CloseConnection()
+        protected override void CloseConnection()
         {
-            if (_conn != null && _conn.State == System.Data.ConnectionState.Open)
+            if (Conn != null && Conn.State == System.Data.ConnectionState.Open)
             {
-                _conn.Close();
-                _conn = null;
+                Conn.Close();
+                Conn = null;
             }
         }
 
@@ -87,7 +86,7 @@ namespace Malshinon_09_06
         {
             try
             {
-                using (MySqlConnection conn = new MySqlConnection(connStr))
+                using (MySqlConnection conn = new MySqlConnection(ConnStr))
                 {
                     conn.Open();
                     string query = @"
