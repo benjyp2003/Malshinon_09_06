@@ -109,6 +109,40 @@ namespace Malshinon_09_06.DAL
             }
         }
 
+
+        void AddPerson(Person person)
+        {
+            try
+            {
+                using (var conn = new MySqlConnection(ConnStr))
+                {
+                    conn.Open();
+                    var query = @"INSERT INTO People (first_name, last_name, secret_code , type, num_reports, num_mentions  )
+                      VALUES (@FirstName, @lastName, @SecretCode, @type, @numReports, @numMensions)";
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@FirstName", person.FirstName);
+                        cmd.Parameters.AddWithValue("@lastName", person.LastName);
+                        cmd.Parameters.AddWithValue("@SecretCode", person.SecretCode);
+                        cmd.Parameters.AddWithValue("@type", person.Type);
+                        cmd.Parameters.AddWithValue("@numReports", person.NumReports);
+                        cmd.Parameters.AddWithValue("@numMensions", person.NumMentions);
+                        cmd.ExecuteNonQuery();
+
+                        Console.WriteLine($"Added {person.FirstName} {person.LastName} Sucssesfully.\n");
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"MySQL Error: {ex.Message}, At People.AddPerson");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message}, , At People.AddPerson");
+            }
+        }
+
         public bool IsARegisterdPerson(FullName fullName)
         {
             try
@@ -374,38 +408,6 @@ namespace Malshinon_09_06.DAL
             return null;
         }
 
-        void AddPerson(Person person)
-        {
-            try
-            {
-                using (var conn = new MySqlConnection(ConnStr))
-                {
-                    conn.Open();
-                    var query = @"INSERT INTO People (first_name, last_name, secret_code , type, num_reports, num_mentions  )
-                      VALUES (@FirstName, @lastName, @SecretCode, @type, @numReports, @numMensions)";
-                    using (var cmd = new MySqlCommand(query, conn))
-                    {
-                        cmd.Parameters.AddWithValue("@FirstName", person.FirstName);
-                        cmd.Parameters.AddWithValue("@lastName", person.LastName);
-                        cmd.Parameters.AddWithValue("@SecretCode", person.SecretCode);
-                        cmd.Parameters.AddWithValue("@type", person.Type);
-                        cmd.Parameters.AddWithValue("@numReports", person.NumReports);
-                        cmd.Parameters.AddWithValue("@numMensions", person.NumMentions);
-                        cmd.ExecuteNonQuery();
-
-                        Console.WriteLine($"Added {person.FirstName} {person.LastName} Sucssesfully.\n");
-                    }
-                }
-            }
-            catch (MySqlException ex)
-            {
-                Console.WriteLine($"MySQL Error: {ex.Message}, At People.AddPerson");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"General Error: {ex.Message}, , At People.AddPerson");
-            }
-        }
 
         public Person GetPersonByName(FullName fullName)
         {

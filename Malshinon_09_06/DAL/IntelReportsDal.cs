@@ -76,7 +76,7 @@ namespace Malshinon_09_06
         public void HandleReports(IntelReports report)
         {
             AddReport(report);
-            Console.WriteLine("Report added.");
+            Console.WriteLine("Report added. \n");
 
             UpdateAverageText(report.Text, report.ReporterId);
         }

@@ -14,11 +14,10 @@ namespace Malshinon_09_06
     {
         static void Main(string[] args)
         {
+
             RunningFunctions run = RunningFunctions.GetInstance();
 
             run.Start();
-
-
 
         }
 

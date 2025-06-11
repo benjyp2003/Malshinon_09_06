@@ -1,12 +1,16 @@
-﻿using System;
+﻿using Malshinon_09_06.Models;
+using System;
 
 namespace Malshinon_09_06
 {
-    internal static class UserInterface
+    internal class UserInterface
     {
+        static RunningFunctions Run = RunningFunctions.GetInstance(); 
         public static void ShowAnalysisMenu()
         {
-            Console.WriteLine("┌───────────────────────────────────────────────┐");
+            Console.WriteLine("\n*** ── Welcome to the MALSHINON Program! ── ***");
+            Console.WriteLine("│                                               │");
+            Console.WriteLine("├───────────────────────────────────────────────┤");
             Console.WriteLine("│                Analysis  Menu                 │");
             Console.WriteLine("├───────────────────────────────────────────────┤");
             Console.WriteLine("│ 1 - Get a new Report.                         │");
@@ -23,15 +27,18 @@ namespace Malshinon_09_06
             Console.Write("Enter your choice: ");
         }
 
+        
+
+
         /// <summary>
         /// Prompts the user for first and last name, returning an array where
         /// index 0 = first name, index 1 = last name.
         /// </summary>
-        public static string[] GetFullName()
+        public static FullName GetReportersFullName()
         {
             Console.Clear();
             Console.WriteLine("┌──────────────────────────────────────────────┐");
-            Console.WriteLine("│       Welcome to the reporting system!       │");
+            Console.WriteLine("│     You entered the reporting system...      │");
             Console.WriteLine("│       Please Enter the Reporters Name.       │");
             Console.WriteLine("└──────────────────────────────────────────────┘");
 
@@ -55,12 +62,12 @@ namespace Malshinon_09_06
                 else { Console.WriteLine("Please enter a valid name."); }
             }
             
-
+            
             Console.WriteLine();
             Console.WriteLine($" Welcome, {firstName} {lastName}!");
             Console.WriteLine();
 
-            return new[] { firstName, lastName };
+            return new FullName(firstName, lastName) ;
         }
 
         /// <summary>
@@ -91,5 +98,7 @@ namespace Malshinon_09_06
 
             return report;
         }
+
+       
     }
 }
