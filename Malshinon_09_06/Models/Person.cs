@@ -35,6 +35,15 @@ namespace Malshinon_09_06.DAL
             NumMentions = numMensions;
         }
 
-
+        public override string ToString()
+        {
+            return $"FirstName: {FirstName} \n" +
+                   $"LasstName: {LastName} \n" +
+                   $"SecretCode: {SecretCode} \n" +
+                   $"Type: {Type} \n" +
+                   $"Num of Reports: {NumReports} \n" +
+                   $"Num of Mensionss {NumMentions} \n";
+                     
+        }
     }
 }

@@ -147,6 +147,232 @@ namespace Malshinon_09_06.DAL
             return false;
         }
 
+        public List<Person> GetAllPeople()
+        {
+            try
+            {
+                List<Person> peopleList = new List<Person>();
+                using (var conn = new MySqlConnection(ConnStr))
+                {
+                    conn.Open();
+                    var query = $@"
+                                 SELECT *
+                                 FROM people";
+
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                peopleList.Add( new Person(
+                                   reader.GetString("first_name"),
+                                   reader.GetString("last_name"),
+                                   reader.GetString("secret_code"),
+                                   reader.GetString("type"),
+                                   reader.GetInt32("num_reports"),
+                                   reader.GetInt32("num_mentions")
+                                   ));
+                            }
+                            return peopleList;
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"MySQL Error: {ex.Message} , At People.GetAllPeople");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message} , At People.GetAllPeople");
+            }
+            return null;
+        }
+        
+        public List<Person> GetAllReporters()
+        {
+            try
+            {
+                List<Person> peopleList = new List<Person>();
+                using (var conn = new MySqlConnection(ConnStr))
+                {
+                    conn.Open();
+                    var query = $@"
+                                 SELECT *
+                                 FROM people
+                                 WHERE type = 'Reporter'";
+
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                peopleList.Add(new Person(
+                                   reader.GetString("first_name"),
+                                   reader.GetString("last_name"),
+                                   reader.GetString("secret_code"),
+                                   reader.GetString("type"),
+                                   reader.GetInt32("num_reports"),
+                                   reader.GetInt32("num_mentions")
+                                   ));
+                            }
+                            return peopleList;
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"MySQL Error: {ex.Message} , At People.GetAllReporters");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message} , At People.GetAllReporters");
+            }
+            return null;
+        }
+
+        public List<Person> GetAllTargets()
+        {
+            try
+            {
+                List<Person> peopleList = new List<Person>();
+                using (var conn = new MySqlConnection(ConnStr))
+                {
+                    conn.Open();
+                    var query = $@"
+                                 SELECT *
+                                 FROM people
+                                 WHERE type = 'Target'";
+
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                peopleList.Add(new Person(
+                                   reader.GetString("first_name"),
+                                   reader.GetString("last_name"),
+                                   reader.GetString("secret_code"),
+                                   reader.GetString("type"),
+                                   reader.GetInt32("num_reports"),
+                                   reader.GetInt32("num_mentions")
+                                   ));
+                            }
+                            Console.WriteLine("lll");
+
+                            return peopleList;
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"MySQL Error: {ex.Message} , At People.GetAllTargetss");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message} , At People.GetAllTargetss");
+            }
+            return null;
+        }
+
+        public List<Person> GetAllPotentialAgents()
+        {
+            try
+            {
+                List<Person> peopleList = new List<Person>();
+                using (var conn = new MySqlConnection(ConnStr))
+                {
+                    conn.Open();
+                    var query = $@"
+                                 SELECT *
+                                 FROM people
+                                 WHERE type = 'Potential agent'";
+
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                peopleList.Add(new Person(
+                                   reader.GetString("first_name"),
+                                   reader.GetString("last_name"),
+                                   reader.GetString("secret_code"),
+                                   reader.GetString("type"),
+                                   reader.GetInt32("num_reports"),
+                                   reader.GetInt32("num_mentions")
+                                   ));
+                            }
+                            return peopleList;
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"MySQL Error: {ex.Message} , At People.GetAllTargetss");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message} , At People.GetAllTargetss");
+            }
+            return null;
+        }
+
+
+        public List<Person> GetAllDangerousTargets()
+        {
+            try
+            {
+                List<Person> peopleList = new List<Person>();
+                using (var conn = new MySqlConnection(ConnStr))
+                {
+                    conn.Open();
+                    var query = $@"
+                                 SELECT *
+                                 FROM people
+                                 WHERE type = 'Dangerous Target'";
+
+
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        using (MySqlDataReader reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                peopleList.Add(new Person(
+                                   reader.GetString("first_name"),
+                                   reader.GetString("last_name"),
+                                   reader.GetString("secret_code"),
+                                   reader.GetString("type"),
+                                   reader.GetInt32("num_reports"),
+                                   reader.GetInt32("num_mentions")
+                                   ));
+                            }
+                            return peopleList;
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"MySQL Error: {ex.Message} , At People.GetAllDangeresTargets");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message} , At People.GetAllDangeresTargets");
+            }
+            return null;
+        }
 
         void AddPerson(Person person)
         {
@@ -446,7 +672,7 @@ namespace Malshinon_09_06.DAL
                 int numOfReports = Convert.ToInt32(GetColomnByName(fullName, "num_reports"));
                 if (numOfReports > 10 && IntelReportsDal.AverageReportersText.TryGetValue(id, out val) && val > 100)
                 {
-                    ChangeType(id, "potential_agent");
+                    ChangeType(id, "potential agent");
                 }
             }
             catch (MySqlException ex)
@@ -465,20 +691,20 @@ namespace Malshinon_09_06.DAL
             {
                 int id = Convert.ToInt32(GetColomnByName(fullName, "num_reports"));
 
-
                 int numOfMentions = Convert.ToInt32(GetColomnByName(fullName, "num_mensions"));
                 if (numOfMentions >= 20)
                 {
+                    ChangeType(id, "Dangerous Target");
                     Console.WriteLine("Caution ! this target has 20+ mentions. "); ;
                 }
             }
             catch (MySqlException ex)
             {
-                Console.WriteLine($"MySQL Error: {ex.Message}");
+                Console.WriteLine($"MySQL Error: {ex.Message}, at PeopleDal.CheckNumMentions");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"General Error: {ex.Message}");
+                Console.WriteLine($"General Error: {ex.Message}, at PeopleDal.CheckNumMentions");
             }
         }
 

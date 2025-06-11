@@ -27,7 +27,16 @@ namespace Malshinon_09_06
 
         public void Start()
         {
-            Console.WriteLine(Dal.GetPersonByName(new FullName("Muhamad", "Zidan")).SecretCode);
+            List<Person> l =  Dal.GetAllTargets();
+            Console.WriteLine(l);
+            if (l != null) 
+            { 
+                foreach (Person p in l)
+                {
+                    Console.WriteLine(p);
+                }   
+            }
+            
             //while (true)
             //{
             //    // get full name of the reporter.
