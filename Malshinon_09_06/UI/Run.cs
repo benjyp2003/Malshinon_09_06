@@ -114,42 +114,6 @@ namespace Malshinon_09_06
         public void Start()
         {
             HandleMenuChoice();
-
-            //while (true)
-            //{
-            //    // get full name of the reporter.
-            //    FullName reporterFullName = GetUserName();
-            //    Dal.HandleReporterName(reporterFullName);
-
-            //    // check the amount of reprots the reporter has, and update his type if needed. 
-            //    Dal.CheckNumReports(reporterFullName);
-
-            //    // get the report.
-            //    string reportTxt = UserInterface.GetReport();
-
-            //    // extract name of the target out of the report.
-            //    FullName TargetFullName = FilterNameFromText.FilterAndGetName(reportTxt);
-
-            //    // send targets name for handeling.
-            //    Dal.HandleTargetName(TargetFullName);
-
-            //    // // check the amount of mentions the target has, and give an alert if needed. 
-            //    Dal.CheckNumMentions(TargetFullName);
-
-            //    // get reporter and targets id.
-            //    int reporterId = Dal.GetPersonsId(reporterFullName);
-            //    int targetId = Dal.GetPersonsId(TargetFullName);
-
-            //    // create a report.
-            //    IntelReports report = new IntelReports(reporterId, targetId, reportTxt);
-
-            //    // send the report for handling. (sending to dataBase etc.)
-            //    reportDal.HandleReports(report);
-
-            //    // If the user presses 0 the program will finish.              
-            //    if (ExitOption() == '0')
-            //    { break; }
-            //}
         }
 
         
