@@ -108,17 +108,17 @@ namespace Malshinon_09_06.DAL
                 {
                     Alerts alert = new Alerts(null, id, null, $"{fullName.fullName} has more than 20 mentions.");
                     SendAlert(alert);
-                    if (CheackRapidReports(id))
-                    {
-                        Alerts rapidAlert = new Alerts(null, id, null, $"{fullName.fullName} has more than 3 Mentions in the last 15 minutes.");
-                        SendAlert(rapidAlert);
-                    }
+                }
+                if (CheackRapidReports(id))
+                {
+                     Alerts rapidAlert = new Alerts(null, id, null, $"{fullName.fullName} has more than 3 Mentions in the last 15 minutes.");
+                     SendAlert(rapidAlert);
                 }
             }
             else
             {
                 AddPerson(new Person(null , fullName.FirstName, fullName.LastName, "Target"));
-                id = Convert.ToInt16(GetColomnByName(fullName, "id"));
+                id = Convert.ToInt32(GetColomnByName(fullName, "id"));
                 IncrementNumMentions(id);
             }
         }
@@ -820,21 +820,21 @@ namespace Malshinon_09_06.DAL
                 {
                     conn.Open();
                     var query = @"SELECT COUNT(*) AS report_count
-                                  FROM intelreports
-                                   WHERE target_id = @id
-                                    AND time_stamp >= NOW() - INTERVAL 15 MINUTE;
+                                  FROM intelreports i
+                                  JOIN alerts a ON i.target_id = a.target_id
+                                    AND created_at >= NOW() - INTERVAL 15 MINUTE;
                                      ";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@id", id);
 
-                        using (var reader = cmd.ExecuteReader())
+                        var reader = cmd.ExecuteScalar();
+                        if (reader != null)
                         {
-                            if (reader.Read())
+                            int count = Convert.ToInt32(reader);
+                            if (count > 3)
                             {
-                                if (reader.GetInt32("report_count") > 3)
-                                { return true; }
-
+                                return true;
                             }
                         }
                     }
