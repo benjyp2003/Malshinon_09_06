@@ -71,14 +71,16 @@ namespace Malshinon_09_06.DAL
         /// <param name="fullName"></param>
         public void HandleReporterName(FullName fullName)
         {
-            int id = Convert.ToInt32(GetColomnByName(fullName, "id"));
+            int id;
             if (IsARegisterdPerson(fullName))
             {
+                id = Convert.ToInt32(GetColomnByName(fullName, "id"));
                 IncrementNumReports(id);
             }
             else
             {
-                AddPerson(new Person(Convert.ToInt32(GetColomnByName(fullName, "id")) , fullName.FirstName, fullName.LastName));
+                AddPerson(new Person(null, fullName.FirstName, fullName.LastName));
+                id = Convert.ToInt32(GetColomnByName(fullName, "id"));
                 IncrementNumReports(id);
             }
         }
@@ -91,10 +93,11 @@ namespace Malshinon_09_06.DAL
         /// <param name="fullName"></param>
         public void HandleTargetName(FullName fullName)
         {
-            int id = Convert.ToInt16(GetColomnByName(fullName, "id"));
+            int id;
             if (IsARegisterdPerson(fullName))
             {
                 // if the target already exist, and his type is 'reporter' change the type to 'both'.
+                id = Convert.ToInt16(GetColomnByName(fullName, "id"));
                 if (GetColomnById(id, "type").ToString() == "reporter")
                 {
                     ChangeType(id, "both");
@@ -115,12 +118,12 @@ namespace Malshinon_09_06.DAL
             else
             {
                 AddPerson(new Person(Convert.ToInt32(GetColomnByName(fullName, "id")) , fullName.FirstName, fullName.LastName, "Target"));
+                id = Convert.ToInt16(GetColomnByName(fullName, "id"));
                 IncrementNumMentions(id);
             }
         }
 
         
-
         void AddPerson(Person person)
         {
             try
@@ -128,11 +131,10 @@ namespace Malshinon_09_06.DAL
                 using (var conn = new MySqlConnection(ConnStr))
                 {
                     conn.Open();
-                    var query = @"INSERT INTO People (id, first_name, last_name, secret_code , type, num_reports, num_mentions  )
-                      VALUES (@id, @FirstName, @lastName, @SecretCode, @type, @numReports, @numMensions)";
+                    var query = @"INSERT INTO People (first_name, last_name, secret_code , type, num_reports, num_mentions  )
+                      VALUES (@FirstName, @lastName, @SecretCode, @type, @numReports, @numMensions)";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("id", person.Id);
                         cmd.Parameters.AddWithValue("@FirstName", person.FirstName);
                         cmd.Parameters.AddWithValue("@lastName", person.LastName);
                         cmd.Parameters.AddWithValue("@SecretCode", person.SecretCode);
