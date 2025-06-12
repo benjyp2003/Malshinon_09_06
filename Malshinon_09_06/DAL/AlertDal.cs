@@ -25,7 +25,6 @@ namespace Malshinon_09_06.DAL
 
             return Conn;
         }
-
         protected override void CloseConnection()
         {
             if (Conn != null && Conn.State == System.Data.ConnectionState.Open)
@@ -65,18 +64,19 @@ namespace Malshinon_09_06.DAL
                 using (MySqlConnection conn = OpenConnection())
                 {
                     conn.Open();
-                    string query = @"INSERT INTO alerts (id, target_id, reason)
-                                     VALUES (@id, @targetId, @reason)";
+                    string query = @"INSERT INTO alerts (target_id, reason)
+                                     VALUES (@targetId, @reason)";
 
                     using (var cmd = new MySqlCommand(query, conn))
                     {
-                        cmd.Parameters.AddWithValue("@id", alert.Id);
                         cmd.Parameters.AddWithValue("@targetId", alert.TargetId);
                         cmd.Parameters.AddWithValue("@reason", alert.Reason);
 
                         cmd.ExecuteNonQuery();
                     }
+                    Console.ForegroundColor = ConsoleColor.Green;
                     Console.WriteLine($"Added Alert {alert.Reason} successfully");
+                    Console.ForegroundColor = ConsoleColor.White;
                 }
 
             }
