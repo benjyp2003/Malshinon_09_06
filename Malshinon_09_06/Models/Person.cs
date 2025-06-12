@@ -9,7 +9,7 @@ namespace Malshinon_09_06.DAL
 {
     internal class Person
     {
-        public int Id { get; }
+        public int? Id { get; }
         public string FirstName { get; }
         public string LastName { get; }
         public string SecretCode { get;  }
@@ -19,7 +19,7 @@ namespace Malshinon_09_06.DAL
 
         public FullName FullName => new FullName(FirstName, LastName);
 
-        public Person(int id, string firstName, string lastNmae, string secretCode = "", string type = "Reporter", int numReports = 0, int numMensions = 0)
+        public Person(int? id, string firstName, string lastNmae, string secretCode = "", string type = "Reporter", int numReports = 0, int numMensions = 0)
         {
             Id = id;
             FirstName = firstName;

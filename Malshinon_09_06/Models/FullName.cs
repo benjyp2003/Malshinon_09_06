@@ -10,7 +10,7 @@ namespace Malshinon_09_06.Models
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string fullName => FirstName + LastName; 
+        public string fullName => FirstName + " " + LastName; 
 
         public FullName(string firstName, string lastName)
         {

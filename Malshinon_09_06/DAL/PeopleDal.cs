@@ -101,6 +101,16 @@ namespace Malshinon_09_06.DAL
                 }
 
                 IncrementNumMentions(id);
+                if (CheckNumMentions(fullName))
+                {
+                    Alerts alert = new Alerts(null, id, null, $"{fullName.fullName} has more than 20 mentions.");
+                    SendAlert(alert);
+                    if (CheackRapidReports(id))
+                    {
+                        Alerts rapidAlert = new Alerts(null, id, null, $"{fullName.fullName} has more than 3 Mentions in the last 15 minutes.");
+                        SendAlert(rapidAlert);
+                    }
+                }
             }
             else
             {
@@ -109,6 +119,7 @@ namespace Malshinon_09_06.DAL
             }
         }
 
+        
 
         void AddPerson(Person person)
         {
@@ -130,7 +141,7 @@ namespace Malshinon_09_06.DAL
                         cmd.Parameters.AddWithValue("@numMensions", person.NumMentions);
                         cmd.ExecuteNonQuery();
 
-                        Console.WriteLine($"Added {person.FirstName} {person.LastName} Sucssesfully.\n");
+                        Console.WriteLine($"Added {person.FirstName}  {person.LastName} Sucssesfully.\n");
                     }
                 }
             }
@@ -692,6 +703,10 @@ namespace Malshinon_09_06.DAL
                 {
                     ChangeType(id, "potential agent");
                 }
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine($"Changed {fullName.fullName} to a Potential Agent.");
+                Console.ForegroundColor= ConsoleColor.White;
+                
             }
             catch (MySqlException ex)
             { 
@@ -703,7 +718,7 @@ namespace Malshinon_09_06.DAL
             }
         }
 
-        public void CheckNumMentions(FullName fullName)
+        public bool CheckNumMentions(FullName fullName)
         {
             try
             {
@@ -717,6 +732,7 @@ namespace Malshinon_09_06.DAL
 
                     Console.WriteLine("Caution ! this target has 20+ mentions. ");
                     Console.ForegroundColor = ConsoleColor.White;
+                    return true;
                 }
             }
             catch (MySqlException ex)
@@ -727,6 +743,7 @@ namespace Malshinon_09_06.DAL
             {
                 Console.WriteLine($"General Error: {ex.Message}, at PeopleDal.CheckNumMentions");
             }
+            return false;
         }
 
         void ChangeType(int id, string newType)
@@ -759,5 +776,49 @@ namespace Malshinon_09_06.DAL
             }
         }
 
+        bool CheackRapidReports(int id)
+        {
+            try
+            {
+                using (var conn = new MySqlConnection(ConnStr))
+                {
+                    conn.Open();
+                    var query = @"SELECT COUNT(*) AS report_count
+                                  FROM intelreports
+                                   WHERE target_id = @id
+                                    AND time_stamp >= NOW() - INTERVAL 15 MINUTE;
+                                     ";
+                    using (var cmd = new MySqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@id", id);
+
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            if (reader.Read())
+                            {
+                                if (reader.GetInt32("report_count") > 3)
+                                { return true; }
+
+                            }
+                        }
+                    }
+                }
+            }
+            catch (MySqlException ex)
+            {
+                Console.WriteLine($"MySQL Error: {ex.Message}, At PeopleDal.CheackRaidReports");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"General Error: {ex.Message}, At PeopleDal.CheackRaidReports");
+            }
+            return false;
+        }
+
+        void SendAlert(Alerts alert)
+        {
+            AlertDal alertDal = AlertDal.GetInstance();
+            alertDal.AddAlert(alert);
+        }
     }
 }
