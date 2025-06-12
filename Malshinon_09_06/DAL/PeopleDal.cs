@@ -97,7 +97,7 @@ namespace Malshinon_09_06.DAL
             if (IsARegisterdPerson(fullName))
             {
                 // if the target already exist, and his type is 'reporter' change the type to 'both'.
-                id = Convert.ToInt16(GetColomnByName(fullName, "id"));
+                id = Convert.ToInt32(GetColomnByName(fullName, "id"));
                 if (GetColomnById(id, "type").ToString() == "reporter")
                 {
                     ChangeType(id, "both");
@@ -117,7 +117,7 @@ namespace Malshinon_09_06.DAL
             }
             else
             {
-                AddPerson(new Person(Convert.ToInt32(GetColomnByName(fullName, "id")) , fullName.FirstName, fullName.LastName, "Target"));
+                AddPerson(new Person(null , fullName.FirstName, fullName.LastName, "Target"));
                 id = Convert.ToInt16(GetColomnByName(fullName, "id"));
                 IncrementNumMentions(id);
             }
@@ -131,19 +131,20 @@ namespace Malshinon_09_06.DAL
                 using (var conn = new MySqlConnection(ConnStr))
                 {
                     conn.Open();
-                    var query = @"INSERT INTO People (first_name, last_name, secret_code , type, num_reports, num_mentions  )
-                      VALUES (@FirstName, @lastName, @SecretCode, @type, @numReports, @numMensions)";
+                    var query = @"INSERT INTO People (first_name, last_name , type, num_reports, num_mentions  )
+                      VALUES (@FirstName, @lastName, @type, @numReports, @numMensions)";
                     using (var cmd = new MySqlCommand(query, conn))
                     {
                         cmd.Parameters.AddWithValue("@FirstName", person.FirstName);
                         cmd.Parameters.AddWithValue("@lastName", person.LastName);
-                        cmd.Parameters.AddWithValue("@SecretCode", person.SecretCode);
                         cmd.Parameters.AddWithValue("@type", person.Type);
                         cmd.Parameters.AddWithValue("@numReports", person.NumReports);
                         cmd.Parameters.AddWithValue("@numMensions", person.NumMentions);
                         cmd.ExecuteNonQuery();
 
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine($"Added {person.FirstName}  {person.LastName} Sucssesfully.\n");
+                        Console.ForegroundColor = ConsoleColor.White;
                     }
                 }
             }
@@ -258,17 +259,24 @@ namespace Malshinon_09_06.DAL
                     {
                         using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
-                            while (reader.Read())
+                            if (reader.Read())
                             {
-                                peopleList.Add(new Person(
-                                    reader.GetInt32("id"),
-                                   reader.GetString("first_name"),
-                                   reader.GetString("last_name"),
-                                   reader.GetString("secret_code"),
-                                   reader.GetString("type"),
-                                   reader.GetInt32("num_reports"),
-                                   reader.GetInt32("num_mentions")
-                                   ));
+                                while (reader.Read())
+                                {
+                                    peopleList.Add(new Person(
+                                        reader.GetInt32("id"),
+                                       reader.GetString("first_name"),
+                                       reader.GetString("last_name"),
+                                       reader.GetString("secret_code"),
+                                       reader.GetString("type"),
+                                       reader.GetInt32("num_reports"),
+                                       reader.GetInt32("num_mentions")
+                                       ));
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("No people of type -reporter- found in the table.");
                             }
                             return peopleList;
                         }
@@ -304,20 +312,25 @@ namespace Malshinon_09_06.DAL
                     {
                         using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
-                            while (reader.Read())
+                            if (reader.Read())
                             {
-                                peopleList.Add(new Person(
-                                   reader.GetInt32("id"),
-                                   reader.GetString("first_name"),
-                                   reader.GetString("last_name"),
-                                   reader.GetString("secret_code"),
-                                   reader.GetString("type"),
-                                   reader.GetInt32("num_reports"),
-                                   reader.GetInt32("num_mentions")
-                                   ));
+                                while (reader.Read())
+                                {
+                                    peopleList.Add(new Person(
+                                       reader.GetInt32("id"),
+                                       reader.GetString("first_name"),
+                                       reader.GetString("last_name"),
+                                       reader.GetString("secret_code"),
+                                       reader.GetString("type"),
+                                       reader.GetInt32("num_reports"),
+                                       reader.GetInt32("num_mentions")
+                                       ));
+                                }
                             }
-                            Console.WriteLine("lll");
-
+                            else
+                            {
+                                Console.WriteLine("No people of type -target- apears in the table.");
+                            }
                             return peopleList;
                         }
                     }
@@ -352,17 +365,24 @@ namespace Malshinon_09_06.DAL
                     {
                         using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
-                            while (reader.Read())
+                            if (reader.Read())
                             {
-                                peopleList.Add(new Person(
-                                   reader.GetInt32("id"),
-                                   reader.GetString("first_name"),
-                                   reader.GetString("last_name"),
-                                   reader.GetString("secret_code"),
-                                   reader.GetString("type"),
-                                   reader.GetInt32("num_reports"),
-                                   reader.GetInt32("num_mentions")
-                                   ));
+                                while (reader.Read())
+                                {
+                                    peopleList.Add(new Person(
+                                       reader.GetInt32("id"),
+                                       reader.GetString("first_name"),
+                                       reader.GetString("last_name"),
+                                       reader.GetString("secret_code"),
+                                       reader.GetString("type"),
+                                       reader.GetInt32("num_reports"),
+                                       reader.GetInt32("num_mentions")
+                                       ));
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("No potential agents exist.");
                             }
                             return peopleList;
                         }
@@ -399,17 +419,24 @@ namespace Malshinon_09_06.DAL
                     {
                         using (MySqlDataReader reader = cmd.ExecuteReader())
                         {
-                            while (reader.Read())
+                            if (reader.Read())
                             {
-                                peopleList.Add(new Person(
-                                    reader.GetInt32("id"),
-                                   reader.GetString("first_name"),
-                                   reader.GetString("last_name"),
-                                   reader.GetString("secret_code"),
-                                   reader.GetString("type"),
-                                   reader.GetInt32("num_reports"),
-                                   reader.GetInt32("num_mentions")
-                                   ));
+                                while (reader.Read())
+                                {
+                                    peopleList.Add(new Person(
+                                        reader.GetInt32("id"),
+                                       reader.GetString("first_name"),
+                                       reader.GetString("last_name"),
+                                       reader.GetString("secret_code"),
+                                       reader.GetString("type"),
+                                       reader.GetInt32("num_reports"),
+                                       reader.GetInt32("num_mentions")
+                                       ));
+                                }
+                            }
+                            else
+                            {
+                                Console.WriteLine("No dangerous targets.");
                             }
                             return peopleList;
                         }
@@ -648,7 +675,11 @@ namespace Malshinon_09_06.DAL
                         cmd.Parameters.AddWithValue("@count", 1);
                         cmd.Parameters.AddWithValue("@id", id);
                         cmd.ExecuteNonQuery();
+
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine($"Incremented reports number of id: {id} by one.\n");
+                        Console.ForegroundColor = ConsoleColor.White;
+
                     }
                 }
             }
@@ -679,7 +710,10 @@ namespace Malshinon_09_06.DAL
                     {
                         cmd.Parameters.AddWithValue("@id", id);
                         cmd.ExecuteNonQuery();
+                        Console.ForegroundColor = ConsoleColor.Green;
                         Console.WriteLine($"Incremented mentions number of id: {id} by one.\n");
+                        Console.ForegroundColor = ConsoleColor.White;
+
                     }
                 }
             }
@@ -726,7 +760,7 @@ namespace Malshinon_09_06.DAL
             {
                 int id = Convert.ToInt32(GetColomnByName(fullName, "num_reports"));
 
-                int numOfMentions = Convert.ToInt32(GetColomnByName(fullName, "num_mensions"));
+                int numOfMentions = Convert.ToInt32(GetColomnByName(fullName, "num_mentions"));
                 if (numOfMentions >= 20)
                 {
                     ChangeType(id, "Dangerous Target");

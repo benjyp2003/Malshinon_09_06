@@ -22,7 +22,6 @@ namespace Malshinon_09_06
             Console.WriteLine("│ 6 - Get all potential agents.                 │");
             Console.WriteLine("│ 7 - Get all dangerous targets.                │");
             Console.WriteLine("│ 8 - Get all active Alerts.                    │");
-            Console.WriteLine("│ 9 - Get Reporters average report length.      │");
             Console.WriteLine("│ 0 - Exit                                      │");
             Console.WriteLine("└───────────────────────────────────────────────┘\n");
             Console.ForegroundColor = ConsoleColor.White;

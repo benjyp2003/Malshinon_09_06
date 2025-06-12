@@ -39,7 +39,7 @@ namespace Malshinon_09_06.DAL
 
         public override string ToString()
         {
-            return $"ID: {Id}" +
+            return $"ID: {Id} \n" +
                    $"FirstName: {FirstName} \n" +
                    $"LasstName: {LastName} \n" +
                    $"SecretCode: {SecretCode} \n" +

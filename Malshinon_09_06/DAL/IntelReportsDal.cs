@@ -76,7 +76,10 @@ namespace Malshinon_09_06
         public void HandleReports(IntelReports report)
         {
             AddReport(report);
+
+            Console.ForegroundColor = ConsoleColor.Green;
             Console.WriteLine("Report added. \n");
+            Console.ForegroundColor = ConsoleColor.White;
 
             UpdateAverageText(report.Text, report.ReporterId);
         }

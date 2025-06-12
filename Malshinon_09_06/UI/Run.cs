@@ -30,6 +30,7 @@ namespace Malshinon_09_06
         {
             while (true)
             {
+
                 ShowAnalysisMenu();
 
                 string choice = Console.ReadLine();
@@ -71,12 +72,26 @@ namespace Malshinon_09_06
                     case "7":
                         Dal.GetAllDangerousTargets().ForEach(person => Console.WriteLine(person));
                         break;
-                    
+
+                    case "8":
+                        Console.WriteLine("not available yet.");
+                        break;
+
+                    case "0":
+                        return;
+
                     default:
                         Console.WriteLine("Not a valid input.");
                         break;
 
                 }
+
+                char breakChar = ExitOption();
+                if (breakChar == 'e' || breakChar == 'E')
+                {
+                    break;
+                }
+                Console.Clear();
             }
         }
 
@@ -86,11 +101,11 @@ namespace Malshinon_09_06
             string text = GetReport();
             FullName targetFullName = FilterNameFromText.FilterAndGetName(text);
 
-            int reporterId = Convert.ToInt32(Dal.GetColomnByName(reporterFullName, "id"));
-            int targetId = Convert.ToInt32(Dal.GetColomnByName(targetFullName, "id"));
-
             Dal.HandleReporterName(reporterFullName);
             Dal.HandleTargetName(targetFullName);
+
+            int reporterId = Convert.ToInt32(Dal.GetColomnByName(reporterFullName, "id"));
+            int targetId = Convert.ToInt32(Dal.GetColomnByName(targetFullName, "id"));
 
             IntelReports report = new IntelReports(reporterId, targetId, text);
             ReportDal.HandleReports(report);
@@ -140,11 +155,14 @@ namespace Malshinon_09_06
         
         char ExitOption()
         {
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine();
             Console.WriteLine("┌──────────────────────────────────────────────┐");
             Console.WriteLine("│       Press any key  (or 'E' to exit):       |");
             Console.WriteLine("└──────────────────────────────────────────────┘");
             char key = Console.ReadKey().KeyChar;
             Console.WriteLine(); // Add a new line after the key press
+            Console.ForegroundColor= ConsoleColor.White;
             return key;
         }
     }
